@@ -1,6 +1,0 @@
-ml-regression-classification
-
-Repositório dedicado ao desenvolvimento de modelos 
-de Machine Learning focados em tarefas de regressão 
-e classificação. Inclui etapas de preparação de dados, feature 
-engineering, treinamento, avaliação e comparação de modelos. 
