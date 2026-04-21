@@ -1,0 +1,4 @@
+❌ FALTA:
+
+Naive Bayes Multivariado
+(opcional mas forte): regressão

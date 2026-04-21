@@ -84,7 +84,10 @@ def gerar_linha_tabela(nome, resultados):
     ps = [r[1] for r in resultados]
     f1s = [r[3] for r in resultados]
 
-    return f"{nome:<30} {formatar(accs):<15} {formatar(ps):<15} {formatar(f1s):<15}"        
+    return f"{nome:<30} {formatar(accs):<15} {formatar(ps):<15} {formatar(f1s):<15}"      
+
+def gerar_linha_tabela_completa(nome, acc, prec, f1, t_train, t_test):
+    return f"{nome:<30} {formatar(acc):<15} {formatar(prec):<15} {formatar(f1):<15} {formatar(t_train):<15} {formatar(t_test):<15}"  
 
 def r2_score(y_real, y_pred):
     media_y = sum(y_real) / len(y_real)
@@ -94,6 +97,12 @@ def r2_score(y_real, y_pred):
 
     return 1 - (ss_res / ss_total)
 
+def gerar_linha_tabela_classificacao(nome, acc, prec, rec, f1, t_train, t_test):
+    return f"{nome:<30} {formatar(acc):<15} {formatar(prec):<15} {formatar(rec):<15} {formatar(f1):<15} {formatar(t_train):<15} {formatar(t_test):<15}"
+
+
+def gerar_linha_tabela_regressao(nome, r2, r2_adj, t_train, t_test):
+    return f"{nome:<30} {formatar(r2):<15} {formatar(r2_adj):<15} {formatar(t_train):<15} {formatar(t_test):<15}"
 
 def r2_ajustado(r2, n, p):
     return 1 - ((1 - r2) * (n - 1) / (n - p - 1))

@@ -77,22 +77,33 @@ def kfold_knn(X, y, k_folds, k_vizinhos, distancia_func):
     folds = criar_folds(X, y, k_folds)
 
     resultados = []
+    tempos_treino = []
+    tempos_teste = []
 
-    for fold_id, (X_train, X_test, y_train, y_test) in enumerate(
-        tqdm(folds, desc="K-Fold")
-    ):
+    for X_train, X_test, y_train, y_test in folds:
+
+        inicio_treino = time.time()
+        # KNN não treina
+        fim_treino = time.time()
+
+        inicio_teste = time.time()
+
         preds = []
-
         for x in X_test:
             pred = knn_classificacao(
                 X_train, y_train, x, k_vizinhos, distancia_func
             )
             preds.append(pred)
 
-        acc, p, r, f1 = calcular_metricas(y_test, preds)
-        resultados.append((acc, p, r, f1))
+        fim_teste = time.time()
 
-    return resultados
+        acc, p, r, f1 = calcular_metricas(y_test, preds)
+
+        resultados.append((acc, p, r, f1))
+        tempos_treino.append(fim_treino - inicio_treino)
+        tempos_teste.append(fim_teste - inicio_teste)
+
+    return resultados, tempos_treino, tempos_teste
 
 def knn_regressao(X_train, y_train, x_teste, k, distancia_func):
     distancias = []

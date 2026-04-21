@@ -134,7 +134,7 @@ def avaliar_multivariado(X_train, y_train, X_test, y_test):
 def avaliar_kfold(X, y, k=3, tipo="uni"):
     folds = criar_folds(X, y, k)
 
-    accs, precs, f1s = [], [], []
+    accs, precs, recs, f1s = [], [], [], []
     tempos_treino, tempos_teste = [], []
 
     for X_train, X_test, y_train, y_test in folds:
@@ -150,10 +150,11 @@ def avaliar_kfold(X, y, k=3, tipo="uni"):
 
         accs.append(acc)
         precs.append(p)
+        recs.append(r)
         f1s.append(f1)
         tempos_treino.append(t_tr)
         tempos_teste.append(t_te)
 
-    return accs, precs, f1s, tempos_treino, tempos_teste
+    return accs, precs,recs, f1s, tempos_treino, tempos_teste
 
 
