@@ -85,3 +85,23 @@ def gerar_linha_tabela(nome, resultados):
     f1s = [r[3] for r in resultados]
 
     return f"{nome:<30} {formatar(accs):<15} {formatar(ps):<15} {formatar(f1s):<15}"        
+
+def r2_score(y_real, y_pred):
+    media_y = sum(y_real) / len(y_real)
+
+    ss_total = sum((y - media_y) ** 2 for y in y_real)
+    ss_res = sum((y_real[i] - y_pred[i]) ** 2 for i in range(len(y_real)))
+
+    return 1 - (ss_res / ss_total)
+
+
+def r2_ajustado(r2, n, p):
+    return 1 - ((1 - r2) * (n - 1) / (n - p - 1))
+
+
+def calcular_metricas_regressao(y_real, y_pred, p):
+    r2 = r2_score(y_real, y_pred)
+    r2_adj = r2_ajustado(r2, len(y_real), p)
+
+    return r2, r2_adj
+

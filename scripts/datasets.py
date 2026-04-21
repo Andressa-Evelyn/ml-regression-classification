@@ -20,7 +20,11 @@ def carregar_arff(caminho):
                 partes = linha.split(",")
 
                 atributos = partes[:-1]
-                classe = partes[-1]
+                try:
+                    classe = float(partes[-1])
+                except:
+                    classe = partes[-1]
+                
 
                 nova_linha = []
                 for val in atributos:

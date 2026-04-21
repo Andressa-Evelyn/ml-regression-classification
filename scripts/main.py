@@ -8,12 +8,15 @@ from datasets import (
 from models.knn import (
     kfold_knn,
     distancia_euclidiana,
-    distancia_manhattan
+    distancia_manhattan,
+    kfold_knn_regressao
 )
 
-from metrics import resumo_metricas, formatar
+from metrics import resumo_metricas, formatar, resumo_metricas_regressao, gerar_linha_tabela
 
 from models.bayers import avaliar_kfold
+
+from models.regressao_linear import kfold_regressao_linear
 
 # carregar dados
 Xc, yc = carregar_arff("datasets/BNG(credit-g)_classificacao.arff")
@@ -37,16 +40,16 @@ print("Regressão:", len(Xr), "amostras")
 #Regressão: 10692 amostras
 
 # Euclidiana
-#res_euc = kfold_knn(Xc, yc, k_folds=3, k_vizinhos=3, distancia_func=distancia_euclidiana)
+res_euc = kfold_knn(Xc, yc, k_folds=3, k_vizinhos=3, distancia_func=distancia_euclidiana)
 
-#print("\nKNN - Euclidiana")
-#resumo_metricas(res_euc)
+print("\nKNN - Euclidiana")
+resumo_metricas(res_euc)
 
 # Manhattan
-#res_man = kfold_knn(Xc, yc, k_folds=3, k_vizinhos=3, distancia_func=distancia_manhattan)
+res_man = kfold_knn(Xc, yc, k_folds=3, k_vizinhos=3, distancia_func=distancia_manhattan)
 
-#print("\nKNN - Manhattan")
-#resumo_metricas(res_man)
+print("\nKNN - Manhattan")
+resumo_metricas(res_man)
 
 #uniariado
 
@@ -71,3 +74,31 @@ print("F1:", formatar(f1s))
 print("Tempo treino:", formatar(t_train))
 print("Tempo teste:", formatar(t_test))
 
+
+print("\n================ REGRESSÃO ================")
+
+# KNN regressão
+res_knn_reg, t_tr_knn, t_te_knn = kfold_knn_regressao(
+    Xr, yr, k_folds=3, k_vizinhos=3, distancia_func=distancia_euclidiana
+)
+
+print("\nKNN Regressão:")
+resumo_metricas_regressao(res_knn_reg)
+print("Tempo treino:", formatar(t_tr_knn))
+print("Tempo teste:", formatar(t_te_knn))
+
+
+# Regressão Linear
+res_lin, t_tr_lin, t_te_lin = kfold_regressao_linear(Xr, yr, k=3)
+
+print("\nRegressão Linear:")
+resumo_metricas_regressao(res_lin)
+print("Tempo treino:", formatar(t_tr_lin))
+print("Tempo teste:", formatar(t_te_lin))
+
+print("\n================ TABELA FINAL ================")
+print(f"{'Modelo':<30} {'Accuracy':<15} {'Precision':<15} {'F1':<15}")
+
+print(gerar_linha_tabela("KNN Euclidiana", res_euc))
+print(gerar_linha_tabela("KNN Manhattan", res_man))
+print(gerar_linha_tabela("Naive Bayes Uni", list(zip(accs, precs, [0]*len(accs), f1s))))
